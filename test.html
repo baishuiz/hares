@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<style>
+#box1 {width:100px;height:30px;background-color:#9F0;opacity:0;zoom:1;;}
+#box2 {width:200px;height:30px;background-color:#F00}
+#box3 {width:300px;height:30px;background-color:#FC0}
+</style>
+</head>
+
+<body>
+
+<div id="box1"></div>
+<div id="box2"></div>
+<div id="box3"></div>
+</body>
+<script type="text/javascript" src="hare.js"></script>
+<script>
+var box1 = document.getElementById('box1');
+var box2 = document.getElementById('box2');
+var box3 = document.getElementById('box3');
+hare.moveTo(box1,10,{height:110,width:360,opacity:0.5});
+hare.moveTo(box2,5,{width:506,height:200});
+hare.moveTo(box3,1,{height:100});
+hare.moveTo(box3,5,{width:506});
+</script>
+</html>
