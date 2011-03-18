@@ -1,6 +1,6 @@
 // JavaScript Document
 (function(window,undefined){
-	var _frame = 25; //默认帧
+	var _frame = 25; //默认帧频
 	var _frameFnList = [];
 	
 	
