@@ -122,6 +122,7 @@
 	
 	
     //Css样式
+	//首先将css名称 统一为 驼峰式；
     var _css = function(dom,styleTitle,styleValue){
         styleTitle=styleTitle.replace(/-(.)/ig,function($0){return ($0.toUpperCase().substring(1))}); //ie只支持驼峰式写法
 		//styleTitle = /opacity/ig.test(styleTitle)?;
