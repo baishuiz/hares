@@ -10,14 +10,14 @@ html,body {padding:0;margin:0;background-color:#000;overflow:hidden}
 </head>
 
 <body>
-<!--
-2011-3-28 baishuiz@gmail.com  星空背景渐显
- -->
 <div id="sky"><img id="skyBackground" src="images/starlit_sky/starlistSky.jpg" /></div>
 </body>
+<!-- script type="text/javascript" src="../hare.js"></script -->
 <script type="text/javascript" src="../hare.js"></script>
 <script>
 var skyBackground = document.getElementById('skyBackground');
+//2011-3-28 baishuiz@gmail.com  星空背景渐显
 hare.moveTo(skyBackground,3,{opacity:1});
+//放置星星 （位置、大小、透明度）在指定范围内随机
 </script>
 </html>
