@@ -37,7 +37,7 @@
     
     //更改指定属性(有计量单位的)
     animationFn.layout = function(attr,dom,time,value){
-		var currentAttrValue = parseInt(_css(dom,attr));
+		var currentAttrValue = parseInt(_css(dom,attr))||0;
 		var step = (value-currentAttrValue)/(_frame*time);//此处根据缓动公式，重新计算step
 		var _changeAttrValue = function(dom,step){
 			//var newValue = currentAttrValue + Math.floor(step);
