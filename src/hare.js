@@ -1,8 +1,13 @@
-// JavaScript Document
+/*
+作者：baishuiz@gmail.com
+*/
 (function(window,undefined){
 	var _frame = 25; //默认帧频
 	var _frameFnList = [];
-	
+	var _specialAttribute = {
+		alpha:true,
+		opacity:true
+	};
 	
 	var hare = function(){};
 	
@@ -28,51 +33,32 @@
 
 	var animationFn = function(){};
     animationFn.dom = [];
-	//更改宽度
-    animationFn.width = function(dom,time,value){
-		var currentWidth = parseInt(_css(dom,'width'));
-		var step = (value-currentWidth)/(_frame*time);
-		var _changeWidth = function(dom,step){
-			//var newWidth = currentWidth + Math.floor(step);
-			var newWidth = currentWidth;
+
+    
+    //更改指定属性(有计量单位的)
+    animationFn.layout = function(attr,dom,time,value){
+		var currentAttrValue = parseInt(_css(dom,attr));
+		var step = (value-currentAttrValue)/(_frame*time);//此处根据缓动公式，重新计算step
+		var _changeAttrValue = function(dom,step){
+			//var newValue = currentAttrValue + Math.floor(step);
+			var newValue = currentAttrValue;
 			var isStop = false;
 			return function(){
-				newWidth +=step;
-				var result = Math.round(newWidth);
+				newValue +=step;
+				var result = Math.round(newValue);
 				if(!isStop){
-				    _css(dom,'width',result+'px');
+				    _css(dom,attr,result+'px');
 					isStop = isStop||value==Math.abs(result);
 				}
 			}
 		};
-		_frameBind(_changeWidth(dom,step));
-		
-	};//更改宽度
-	
-	
-	//更改高度
-    animationFn.height = function(dom,time,value){
-		var currentHeight = parseInt(_css(dom,'height'));
-		var step = (value-currentHeight)/(_frame*time);
-		var _changeHeight = function(dom,step){
-			var newHeight = currentHeight;
-			var isStop = false;
-			return function(){
-				newHeight +=step;
-				var result = Math.round(newHeight);
-				if(!isStop){
-				    _css(dom,'height',result+'px');
-					isStop = isStop||value==Math.abs(result);
-				}
-			}
-		};
-		_frameBind(_changeHeight(dom,step));
-		
-	};//更改高度	
+		_frameBind(_changeAttrValue(dom,step));    	
+    };
+
 	
 	
 	//更改透明度
-    animationFn.alpha=animationFn.opacity = function(dom,time,value){
+    animationFn.alpha = animationFn.opacity = function(dom,time,value){
 		var opacity = typeof dom.style.opacity=='undefined'?animationFn.alpha.forIE:animationFn.alpha.forW3c;
 		var currentOpacity = opacity(dom);
 		var step = (value-currentOpacity)/(_frame*time);
@@ -116,9 +102,29 @@
 
 		//循环设置 option中涉及到的属性
 		for (attr in option){
-		    animationFn[attr](sprite,time,option[attr]);
+		    if(_specialAttribute[attr]){
+		    	animationFn[attr](sprite,time,option[attr]);
+			}else{
+		    	animationFn.layout(attr,sprite,time,option[attr]);
+			}
 		}
 	};
+
+    //相对位置移动
+	var _moveBy = function(sprite,time,option){
+		if(!option||!sprite) return ;
+		time = time||0;
+
+		//循环设置 option中涉及到的属性
+		for (attr in option){
+			var currentAttrValue = parseInt(_css(sprite,attr));
+		    if(_specialAttribute[attr]){
+		    	animationFn[attr](sprite,time,currentAttrValue+option[attr]);
+			}else{
+		    	animationFn.layout(attr,sprite,time,currentAttrValue+option[attr]);
+			}
+		}
+	};//over	
 	
 	
     //Css样式
@@ -148,6 +154,7 @@
 	 
 	hare.prototype = {
 		moveTo: _moveTo,
+		moveBy: _moveBy,
 		moveFrom:function(){},
 		frame:function(){}
 	};		
