@@ -4,6 +4,13 @@
 (function(window,undefined){
 	var _frame = 25; //默认帧频
 	var _frameFnList = [];
+	
+    //属性别名
+    var _alias = {
+    	x:'left',
+    	y:'top'
+    };
+    //特殊属性
 	var _specialAttribute = {
 		alpha:true,
 		opacity:true
@@ -34,6 +41,14 @@
 	var animationFn = function(){};
     animationFn.dom = [];
 
+
+    //规范属性名
+    var _getAttributeName = function(attrName){
+    	if(attrName in _alias){
+    		attrName = _alias[attrName];
+    	}
+    	return attrName;
+    };
     
     //更改指定属性(有计量单位的)
     animationFn.layout = function(attr,dom,time,value){
@@ -102,10 +117,11 @@
 
 		//循环设置 option中涉及到的属性
 		for (attr in option){
-		    if(_specialAttribute[attr]){
-		    	animationFn[attr](sprite,time,option[attr]);
+			var attrFix = _getAttributeName(attr);
+		    if(_specialAttribute[attrFix]){
+		    	animationFn[attrFix](sprite,time,option[attr]);
 			}else{
-		    	animationFn.layout(attr,sprite,time,option[attr]);
+		    	animationFn.layout(attrFix,sprite,time,option[attr]);
 			}
 		}
 	};
@@ -117,11 +133,12 @@
 
 		//循环设置 option中涉及到的属性
 		for (attr in option){
-			var currentAttrValue = parseInt(_css(sprite,attr));
-		    if(_specialAttribute[attr]){
-		    	animationFn[attr](sprite,time,currentAttrValue+option[attr]);
+			var attrFix = _getAttributeName(attr);
+			var currentAttrValue = parseInt(_css(sprite,attrFix))||0;
+		    if(_specialAttribute[attrFix]){
+		    	animationFn[attrFix](sprite,time,currentAttrValue+option[attr]);
 			}else{
-		    	animationFn.layout(attr,sprite,time,currentAttrValue+option[attr]);
+		    	animationFn.layout(attrFix,sprite,time,currentAttrValue+option[attr]);
 			}
 		}
 	};//over	
