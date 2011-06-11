@@ -173,7 +173,7 @@
 		moveTo: _moveTo,
 		moveBy: _moveBy,
 		moveFrom:function(){},
-		frame:function(){}
+		frame:_frameFn
 	};		
 	
 	window.hare = new hare;
