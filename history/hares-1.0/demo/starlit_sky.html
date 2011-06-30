@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>星空Demo</title>
+<style>
+html,body {padding:0;margin:0;background-color:#000;overflow:hidden}
+#skyBackground{ opacity:0;zoom:0;}
+</style>
+</head>
+
+<body>
+<div id="sky"><img id="skyBackground" src="images/starlit_sky/starlistSky.jpg" /></div>
+</body>
+<!-- script type="text/javascript" src="../hare.js"></script -->
+<script type="text/javascript" src="../src/hare.js"></script>
+<script>
+var skyBackground = document.getElementById('skyBackground');
+//2011-3-28 baishuiz@gmail.com  星空背景渐显
+hare.moveTo(skyBackground,3,{opacity:1});
+//放置星星 （位置、大小、透明度）在指定范围内随机
+</script>
+</html>
