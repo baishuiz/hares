@@ -1,5 +1,12 @@
 /*
-作者：baishuiz@gmail.com
+author：baishuiz@gmail.com
+预期：
+1、实现级联调用
+2、实现动画队列
+3、解决回流引发的效率问题
+调用方式：
+
+
 */
 (function(window,undefined){
 	var _frame = 25; //默认帧频
@@ -22,64 +29,14 @@
 		_sprite = sprite;
 		option = option ||{};
        
-		//动画方法
-		var _moveTo = function(sprite,time,attributes,option){
-			if(!attributes||!sprite) return ;
-			time = time||0;
-			option = option || {};
-
-			//获取元素动画队列
-			var animationQuery = sprite.Hares.animationQuery || [];
-			if(option.stopBefor){// 终止并清除队列中已有的动画设置
-				//_stop(sprite);
-				animationQuery = [];
-				animationQuery.push(attributes);
-			}
-
-			if(option.overrideCurrent){//加入当前正在执行的动画队列，并覆写当前属性
-				//_stop(sprite);
-				animationQuery[0] = _merge(animationQuery[0],attributes);
-				//animationQuery = [];
-			}
-
-			//animationQuery.push(attributes);
-			sprite.Hares.animationQuery = animationQuery;
-
-			//循环设置 option中涉及到的属性
-			for (attr in option){
-				var attrFix = _getAttributeName(attr);
-			    if(_specialAttribute[attrFix]){
-			    	animationFn[attrFix](sprite,time,option[attr]);
-				}else{
-			    	animationFn.layout(attrFix,sprite,time,option[attr]);
-				}
-			}
-
-			return new hare(sprite,{waitQuery:true});
-		};
-
-	    //相对位置移动
-		var _moveBy = function(sprite,time,option){
-			if(!option||!sprite) return ;
-			time = time||0;
-
-			//循环设置 option中涉及到的属性
-			for (attr in option){
-				var attrFix = _getAttributeName(attr);
-				var currentAttrValue = parseInt(_css(sprite,attrFix))||0;
-			    if(_specialAttribute[attrFix]){
-			    	animationFn[attrFix](sprite,time,currentAttrValue+option[attr]);
-				}else{
-			    	animationFn.layout(attrFix,sprite,time,currentAttrValue+option[attr]);
-				}
-			}
-		};//over	
 		
-				
+		
+		/*		
 		this.moveTo = _moveTo;
 		this.moveBy =  _moveBy;
 		this.moveFrom = function(){};
 		this.frame = _frameFn;
+		*/
 		
 
 	};
@@ -214,6 +171,60 @@
 		_onFrameHandle = window.setInterval(_onFrame,1000/_frame);
 		//_onFrameHandle = window.setInterval(function(){},1000/_frame);
 	};
+	
+	//动画方法
+	var _moveTo = function(sprite,time,attributes,option){
+		if(!attributes||!sprite) return ;
+		time = time||0;
+		option = option || {};
+
+		//获取元素动画队列
+		sprite.Hares = sprite.Hares || {};
+		var animationQuery = sprite.Hares.animationQuery || [];
+		if(option.stopBefor){// 终止并清除队列中已有的动画设置
+			//_stop(sprite);
+			animationQuery = [];
+			animationQuery.push(attributes);
+		}
+
+		if(option.overrideCurrent){//加入当前正在执行的动画队列，并覆写当前属性
+			//_stop(sprite);
+			animationQuery[0] = _merge(animationQuery[0],attributes);
+			//animationQuery = [];
+		}
+		//animationQuery.push(attributes);
+		sprite.Hares.animationQuery = animationQuery;
+
+		//循环设置 option中涉及到的属性
+		for (attr in attributes){
+			
+			var attrFix = _getAttributeName(attr);
+			if(_specialAttribute[attrFix]){
+				animationFn[attrFix](sprite,time,attributes[attr]);
+			}else{
+				animationFn.layout(attrFix,sprite,time,attributes[attr]);
+			}
+		}
+        return this; 
+		//return new hare(sprite,{waitQuery:true});
+	};
+
+	//相对位置移动
+	var _moveBy = function(sprite,time,option){
+		if(!option||!sprite) return ;
+		time = time||0;
+
+		//循环设置 option中涉及到的属性
+		for (attr in option){
+			var attrFix = _getAttributeName(attr);
+			var currentAttrValue = parseInt(_css(sprite,attrFix))||0;
+			if(_specialAttribute[attrFix]){
+				animationFn[attrFix](sprite,time,currentAttrValue+option[attr]);
+			}else{
+				animationFn.layout(attrFix,sprite,time,currentAttrValue+option[attr]);
+			}
+		}
+	};//over		
 	 
 	hare.prototype = {
 		moveTo: _moveTo,

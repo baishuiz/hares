@@ -63,7 +63,8 @@
 				var result = Math.round(newValue);
 				if(!isStop){
 				    _css(dom,attr,result+'px');
-					isStop = isStop||value==Math.abs(result);
+					isStop = isStop||Math.abs(value)<=Math.abs(result);
+					isStop && _css(dom,attr,value+'px');
 				}
 			}
 		};
